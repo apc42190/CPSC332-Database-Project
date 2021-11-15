@@ -26,7 +26,7 @@ CREATE TABLE Degree (
 CREATE TABLE Department (
     DNum int PRIMARY KEY,
     DName varchar(255),
-    DPhone int,
+    DPhone bigint,
     ChairSSN int,
     DLocation varchar(255),
     FOREIGN KEY (ChairSSN)
