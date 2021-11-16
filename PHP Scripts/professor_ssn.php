@@ -12,28 +12,27 @@
 
             $link = mysqli_connect($host_name, $user, $password, $database);
 
-            if($link->connect_error) {
-                echo "Hello";
-                die("Could not connect: " . connect_error());
+            if(!$link) {
+                die("Could not connect: " . mysqli_connect_error());
             } else {
-                
+
                 echo "Connected Successfully\n";
 
-                $query = "SELECT Professor.Title Title, Section.ClassRoom Room, Meeting.MeetDay Day, Section.BegTime Start, Section.EndTime End
+                $query = "SELECT Title, ClassRoom Room, MeetDay Day, BegTime Start, EndTime End
                             FROM Professor P, Section S, Meeting M
-                            WHERE P.SSN = \"$SSN\" AND P.SSN = S.TeacherSSN AND S.CNUM = M.CNUM AND S.SecNum = M.SecNum";
+                            WHERE P.SSN = " . $SSN . " AND P.SSN = S.TeacherSSN AND S.CNum = M.CNum AND S.SecNum = M.SecNum";
                 
-                $result = $link->query($query);
+                $result = mysqli_query($link, $query);
 
-                if ($result->num_rows > 0) {
-                    while($row = $result->fetch_assoc()) {
+                if (mysqli_num_rows($result) > 0) {
+                    while($row = mysqli_fetch_assoc($result)) {
                         echo "Title: " . $row["Title"] . " Room: " . $row["Room"] . " Day: " . $row["Day"] . " Start Time: " . $row["Start"] . " End Time: " . $row["End"];
                     }
                 } else {
                     echo "No results";
                 }
             }
-            $link->close();
+            mysqli_close($link);
         ?>
     </body>
 </html>
