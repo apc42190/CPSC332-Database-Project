@@ -7,7 +7,7 @@
             $password = "3K08aBeq";
             $database = "cs332t10";
             
-            $SSN = $_POST['SSN'];
+            $CWID = $_POST['CWID'];
 
 
             $link = mysqli_connect($host_name, $user, $password, $database);
@@ -16,9 +16,9 @@
                 die("Could not connect: " . mysqli_connect_error());
             } else {
 
-                $query = "SELECT Title, PLName, ClassRoom Room, MeetDay Day, BegTime Start, EndTime End
-                            FROM Professor P, Section S, Meeting M
-                            WHERE P.SSN = " . $SSN . " AND P.SSN = S.TeacherSSN AND S.CNum = M.CNum AND S.SecNum = M.SecNum";
+                $query = "SELECT CTitle, Grade
+                          From Course C, Enrollment E
+                          WHERE E.SCWID = " . $CWID . " AND C.CNum = E.ClassNo";
                 
                 $result = mysqli_query($link, $query);
 
@@ -26,22 +26,14 @@
 
                     echo "<table border='1'>
                     <tr>
-                    <th>Title</th>
-                    <th>Name</th>
-                    <th>Room</th>
-                    <th>Day</th>
-                    <th>Start Time</th>
-                    <th>End Time</th>
+                    <th>Course</th>
+                    <th>Grade</th>
                     </tr>";
 
                     while($row = mysqli_fetch_assoc($result)) {
                         echo "<tr>";
-                        echo "<td>" . $row["Title"]; 
-                        echo "<td>" . $row["PLName"];   
-                        echo "<td>" . $row["Room"];
-                        echo "<td>" . $row["Day"];
-                        echo "<td>" . $row["Start"];
-                        echo "<td>" . $row["End"];
+                        echo "<td>" . $row["CTitle"];   
+                        echo "<td>" . $row["Grade"];
                         echo "</td>";
                     }
                     echo "</table>";

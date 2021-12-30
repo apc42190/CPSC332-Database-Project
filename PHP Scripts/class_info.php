@@ -7,7 +7,7 @@
             $password = "3K08aBeq";
             $database = "cs332t10";
             
-            $SSN = $_POST['SSN'];
+            $course_no = $_POST['course'];
 
 
             $link = mysqli_connect($host_name, $user, $password, $database);
@@ -16,9 +16,10 @@
                 die("Could not connect: " . mysqli_connect_error());
             } else {
 
-                $query = "SELECT Title, PLName, ClassRoom Room, MeetDay Day, BegTime Start, EndTime End
-                            FROM Professor P, Section S, Meeting M
-                            WHERE P.SSN = " . $SSN . " AND P.SSN = S.TeacherSSN AND S.CNum = M.CNum AND S.SecNum = M.SecNum";
+                $query = "SELECT S.SecNum Section, ClassRoom Room, MeetDay Day, BegTime Start, EndTime End, COUNT(E.SecNo) AS no_of_student
+                          FROM Section S, Meeting M, Enrollment E
+                          WHERE S.CNum = " . $course_no . " AND S.SecNum = E.SecNo AND M.SecNum = S.SecNum AND E.ClassNo = S.CNum AND S.CNum = M.CNum
+                          GROUP BY Section";
                 
                 $result = mysqli_query($link, $query);
 
@@ -26,22 +27,22 @@
 
                     echo "<table border='1'>
                     <tr>
-                    <th>Title</th>
-                    <th>Name</th>
+                    <th>Section Number</th>
                     <th>Room</th>
                     <th>Day</th>
-                    <th>Start Time</th>
-                    <th>End Time</th>
+                    <th>Start</th>
+                    <th>End</th>
+                    <th>Students</th>
                     </tr>";
 
                     while($row = mysqli_fetch_assoc($result)) {
                         echo "<tr>";
-                        echo "<td>" . $row["Title"]; 
-                        echo "<td>" . $row["PLName"];   
-                        echo "<td>" . $row["Room"];
-                        echo "<td>" . $row["Day"];
-                        echo "<td>" . $row["Start"];
-                        echo "<td>" . $row["End"];
+                        echo "<td>" . $row["Section"];   
+                        echo "<td>" . $row["Room"];   
+                        echo "<td>" . $row["Day"];   
+                        echo "<td>" . $row["Start"];   
+                        echo "<td>" . $row["End"];   
+                        echo "<td>" . $row["no_of_student"];   
                         echo "</td>";
                     }
                     echo "</table>";

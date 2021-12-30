@@ -7,7 +7,9 @@
             $password = "3K08aBeq";
             $database = "cs332t10";
             
-            $SSN = $_POST['SSN'];
+            $course_no = $_POST['course'];
+            $sec_no = $_POST['section'];
+
 
 
             $link = mysqli_connect($host_name, $user, $password, $database);
@@ -16,9 +18,10 @@
                 die("Could not connect: " . mysqli_connect_error());
             } else {
 
-                $query = "SELECT Title, PLName, ClassRoom Room, MeetDay Day, BegTime Start, EndTime End
-                            FROM Professor P, Section S, Meeting M
-                            WHERE P.SSN = " . $SSN . " AND P.SSN = S.TeacherSSN AND S.CNum = M.CNum AND S.SecNum = M.SecNum";
+                $query = "SELECT Grade, COUNT(Grade) AS Number_of_Appearances
+                          FROM Enrollment E 
+                          WHERE E.ClassNo = " . $course_no . " AND E.SecNo = " . $sec_no . 
+                          " GROUP BY Grade";
                 
                 $result = mysqli_query($link, $query);
 
@@ -26,26 +29,17 @@
 
                     echo "<table border='1'>
                     <tr>
-                    <th>Title</th>
-                    <th>Name</th>
-                    <th>Room</th>
-                    <th>Day</th>
-                    <th>Start Time</th>
-                    <th>End Time</th>
+                    <th>Grade</th>
+                    <th>Count</th>
                     </tr>";
 
                     while($row = mysqli_fetch_assoc($result)) {
                         echo "<tr>";
-                        echo "<td>" . $row["Title"]; 
-                        echo "<td>" . $row["PLName"];   
-                        echo "<td>" . $row["Room"];
-                        echo "<td>" . $row["Day"];
-                        echo "<td>" . $row["Start"];
-                        echo "<td>" . $row["End"];
+                        echo "<td>" . $row["Grade"];   
+                        echo "<td>" . $row["Number_of_Appearances"];
                         echo "</td>";
                     }
                     echo "</table>";
-
                 } else {
                     echo "No results";
                 }

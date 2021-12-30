@@ -84,7 +84,7 @@ CREATE TABLE Student (
     SFName varchar(255),
     SLName varchar(255),
     SAddress varchar(255),
-    SPhone int,
+    SPhone bigint,
     MajorNum int,
     FOREIGN KEY (MajorNum)
         REFERENCES Department(DNum)
